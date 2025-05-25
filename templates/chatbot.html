@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot - AyurCure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="../static/css/Chatbot.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <i class="fas fa-times sidebar-close" id="sidebar-close"></i>
+        <div class="sidebar-top">
+            <div class="profile">
+                <img src="../static/uploads/{{ profile_pic }}" alt="Profile Picture" class="profile-img">
+                <h3 class="username">{{ username }}</h3>
+            </div>
+        </div>
+        <div class="sidebar-scrollable">
+            <ul class="nav-links">
+                <li><a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> <span class="link-text">Dashboard</span></a></li>
+                <li><a href="/ayurveda_prescription" class="nav-link"><i class="fas fa-notes-medical"></i> <span class="link-text">Prescriptions</span></a></li>
+                <li><a href="/chatbot" class="nav-link active"><i class="fas fa-robot"></i> <span class="link-text">Chatbot</span></a></li>
+                <li><a href="/contact" class="nav-link"><i class="fas fa-envelope"></i> <span class="link-text">Contact</span></a></li>
+                <li><a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>AyurCure Wellness</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <div class="logo">AyurCure</div>
+            <div class="theme-toggle">
+                <i class="fas fa-adjust" id="theme-icon"></i>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2><i class="fas fa-spa" style="margin-right: 10px;"></i> Personalized Ayurveda Remedy Guide</h2>
+                </div>
+                <div class="chat-box" id="chat-box">
+                    <div class="bot-message">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712037.png" alt="AyurBot">
+                        <p>Hello! I'm your Ayurveda assistant. Please describe your symptoms or health concerns, and I'll suggest natural remedies based on Ayurvedic principles.</p>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <input type="text" id="user-input" placeholder="Describe your symptoms (e.g., headache, fatigue, digestion issues)...">
+                    <button onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+            
+            <script>
+                function sendMessage() {
+                    const userInput = document.getElementById("user-input");
+                    const chatBox = document.getElementById("chat-box");
+                    const message = userInput.value.trim();
+                    
+                    if (message === "") return;
+                    
+                    // Add user message
+                    chatBox.innerHTML += `
+                        <div class="message user-message">
+                            <p>${message}</p>
+                        </div>`;
+                    
+                    // Clear input
+                    userInput.value = "";
+                    
+                    // Show typing indicator
+                    chatBox.innerHTML += `
+                        <div class="typing-indicator" id="typing-indicator">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>`;
+                    document.getElementById("typing-indicator").style.display = 'flex';
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    
+                    // Get bot response
+                    fetch('/get_remedy', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query: message })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Remove typing indicator
+                        const typingIndicator = document.getElementById("typing-indicator");
+                        if (typingIndicator) typingIndicator.remove();
+                        
+                        // Add bot response
+                        chatBox.innerHTML += `
+                            <div class="message bot-message">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712037.png" alt="AyurBot">
+                                <p>${data.remedy}</p>
+                            </div>`;
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        const typingIndicator = document.getElementById("typing-indicator");
+                        if (typingIndicator) typingIndicator.remove();
+                        
+                        chatBox.innerHTML += `
+                            <div class="message bot-message">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712037.png" alt="AyurBot">
+                                <p>Sorry, I'm having trouble connecting. Please try again later.</p>
+                            </div>`;
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    });
+                }
+                
+                // Allow sending message with Enter key
+                document.getElementById("user-input").addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        sendMessage();
+                    }
+                });
+            </script>        
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2025 by Team No 24 (GAT) | All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/Ganesh-B-2025" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/gani2000/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+    const themeToggle = document.getElementById('theme-icon');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        if(document.body.classList.contains('dark-theme')){
+            themeToggle.classList.remove('fa-adjust');
+            themeToggle.classList.add('fa-sun');
+        } else {
+            themeToggle.classList.remove('fa-sun');
+            themeToggle.classList.add('fa-adjust');
+        }
+    });
+</script>
+</body>
+</html>

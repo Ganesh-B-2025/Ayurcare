@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - AyurCure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="../static/css/contact.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <i class="fas fa-times sidebar-close" id="sidebar-close"></i>
+        <div class="sidebar-top">
+            <div class="profile">
+                <img src="../static/uploads/{{ profile_pic }}" alt="Profile Picture" class="profile-img">
+                <h3 class="username">{{ username }}</h3>
+            </div>
+        </div>
+        <div class="sidebar-scrollable">
+            <ul class="nav-links">
+                <li><a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> <span class="link-text">Dashboard</span></a></li>
+                <li><a href="/ayurveda_prescription" class="nav-link"><i class="fas fa-notes-medical"></i> <span class="link-text">Prescriptions</span></a></li>
+                <li><a href="/chatbot" class="nav-link"><i class="fas fa-robot"></i> <span class="link-text">Chatbot</span></a></li>
+                <li><a href="/contact" class="nav-link active"><i class="fas fa-envelope"></i> <span class="link-text">Contact</span></a></li>
+                <li><a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>AyurCure Wellness</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <div class="logo">AyurCure</div>
+            <div class="theme-toggle">
+                <i class="fas fa-adjust" id="theme-icon"></i>
+            </div>
+        </header>
+
+        <main class="content">
+            <div class="contact-container">
+                <div class="contact-row">
+                    <div class="contact-image">
+                        <img src="../static/images/contact3.png" alt="Contact Us">
+                    </div>
+                    
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-content">
+                            <h3>Contact Us</h3>
+                            <input type="text" placeholder="Your name" name="name" required maxlength="50" class="form-box">
+                            <input type="email" placeholder="Your email" name="email" required maxlength="50" class="form-box">
+                            <input type="text" placeholder="Phone number" name="number" required maxlength="10" minlength="10" class="form-box" pattern="[0-9]{10}" title="Enter a 10-digit phone number">
+                            <textarea name="msg" class="form-box" placeholder="Your message" required maxlength="1000" cols="30" rows="6"></textarea>
+                            
+                            <input type="hidden" name="_captcha" value="false">
+
+                            <button type="submit" class="inline-btn">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="contact-boxes">
+                    <div class="contact-box">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone Number</h3>
+                        <a href="tel:1234567890">91+ 9980643372 Ganesh B</a>
+                        <a href="tel:1112223333">91+ 7996026965 Darshan B</a>
+                        <a href="tel:1112223333">91+ 9988776655 Rekha R</a>
+                        <a href="tel:1112223333">91+ 8877996644 Unnati S</a>
+                    </div>
+                    
+                    <div class="contact-box">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email Address</h3>
+                        <a href="mailto:darshanbabji461@gmail.com">darshanbabji461@gmail.com</a>
+                        <a href="mailto:ganesh1ga22is403@gmail.com">ganesh1ga22is403@gmail.com</a>
+                        <a href="mailto:rekha1ga22is412@gmail.com">rekha1ga22is412@gmail.com</a>
+                        <a href="mailto:unnati1ga21is179@gmail.com">unnati1ga21is179@gmail.com</a>
+                    </div>
+                    
+                    <div class="contact-box">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Our Location</h3>
+                        <a href="https://www.google.com/maps/place/Global+Academy+of+Technology/@12.9274338,77.5243329,17z/data=!3m1!4b1!4m6!3m5!1s0x3bae3e51e9d44b57:0x7306c680a9673b5a!8m2!3d12.9274286!4d77.5269078!16s%2Fm%2F0gx_433?entry=ttu&g_ep=EgoyMDI1MDEyOC4wIKXMDSoASAFQAw%3D%3D"
+                           target="_blank">RR Nagar, Bangalore, India - 560098</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>&copy; 2025 by Team No 24 (GAT) | All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/Ganesh-B-2025" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/gani2000/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
+    </div>
+</div>
+<!-- Thank You Popup -->
+<div id="thankYouPopup">
+    <div class="popup-content">
+        <i id="closePopup" class="fas fa-times"></i>
+        <h2>Thank you!</h2>
+        <p>Your message has been sent.</p>
+    </div>
+</div>
+
+
+<script>
+    const themeToggle = document.getElementById('theme-icon');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        if(document.body.classList.contains('dark-theme')){
+            themeToggle.classList.remove('fa-adjust');
+            themeToggle.classList.add('fa-sun');
+        } else {
+            themeToggle.classList.remove('fa-sun');
+            themeToggle.classList.add('fa-adjust');
+        }
+    });
+
+    const form = document.getElementById('contactForm');
+    const popup = document.getElementById('thankYouPopup');
+    const closePopup = document.getElementById('closePopup');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); 
+
+        // Validate mobile number manually
+        const numberInput = form.querySelector('input[name="number"]');
+        const numberValue = numberInput.value.trim();
+        if (numberValue.length !== 10 || !/^\d{10}$/.test(numberValue)) {
+            alert("Please enter a valid 10-digit mobile number.");
+            return;
+        }
+
+        const formData = new FormData(form);
+
+        axios.post('https://formsubmit.co/ajax/ganesh1ga22is403@gmail.com', formData)
+        .then(response => {
+            popup.style.display = 'flex';
+            form.reset();
+        })
+        .catch(error => {
+            alert('Something went wrong. Please try again.');
+            console.error(error);
+        });
+    });
+
+    closePopup.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+</script>
+</body>
+</html>

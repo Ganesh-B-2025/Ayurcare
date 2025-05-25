@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - AyurCure</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="../static/css/register.css">
+</head>
+
+<body>
+
+<div class="form-container">
+    <h2>Login</h2>
+
+    <form method="POST" action="/login">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Username" required>
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+
+        <button type="submit" class="btn">Login</button>
+    </form>
+
+    <div class="text-center">
+        Don't have an account? <a href="/register">Register here</a>
+    </div>
+</div>
+
+<!-- Toast and jQuery Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        $(document).ready(function() {
+          {% for category, message in messages %}
+            toastr.options.timeOut = 3000;
+            toastr.options.progressBar = true;
+            toastr.options.closeButton = true;
+            toastr["{{ category }}"]("{{ message }}");
+          {% endfor %}
+        });
+      {% endif %}
+    {% endwith %}
+</script>
+
+</body>
+</html>

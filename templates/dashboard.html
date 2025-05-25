@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AyurCure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <i class="fas fa-times sidebar-close" id="sidebar-close"></i>
+        <div class="sidebar-top">
+            <div class="profile">
+                <img src="../static/uploads/{{ profile_pic }}" alt="Profile Picture" class="profile-img">
+                <h3 class="username">{{ username }}</h3>
+            </div>
+        </div>
+        <div class="sidebar-scrollable">
+            <ul class="nav-links">
+                <li><a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> <span class="link-text">Dashboard</span></a></li>
+                <li><a href="/ayurveda_prescription" class="nav-link"><i class="fas fa-notes-medical"></i> <span class="link-text">Prescriptions</span></a></li>
+                <li><a href="/chatbot" class="nav-link"><i class="fas fa-robot"></i> <span class="link-text">Chatbot</span></a></li>
+                <li><a href="/contact" class="nav-link"><i class="fas fa-envelope"></i> <span class="link-text">Contact</span></a></li>
+                <li><a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>AyurCure Wellness</p>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <div class="left-header">
+                <i class="fas fa-bars" id="menu-toggle"></i>
+                <div class="logo animate__animated animate__fadeIn"><i class="fas fa-spa logo-icon"></i> <span class="logo-text">AyurCure</span></div>
+            </div>
+            <div class="theme-toggle">
+                <i class="fas fa-adjust" id="theme-icon"></i>
+            </div>
+        </header>
+
+        <main class="content">
+            <h1 class="heading animate__animated animate__fadeInDown">Our Services</h1>
+            <div class="card-grid">
+                <div class="card animate__animated animate__fadeInUp">
+                    <div class="card-img-container">
+                        <img src="../static/images/report.jpg" alt="Generating Report" class="card-img">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h2>Generating Report</h2>
+                        <p>Generate a personalized Ayurvedic remedy report analyzing symptoms, suggesting medicinal plants, and recommending remedies. Downloadable as an informative PDF guide for natural healing.</p>
+                        <a href="/ayurveda_prescription" class="card-btn">Get Started <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="card animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="card-img-container">
+                        <img src="../static/images/Ayurveda.jpg" alt="Ayurvedic Medicines" class="card-img">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h2>Ayurvedic Medicines Info</h2>
+                        <p>Explore the scientific basis of Ayurveda and discover home remedies for holistic health using herbs, spices, and lifestyle changes.</p>
+                        <div class="resource-links">
+                            <a href="https://kleayurveda.org/Akshara/Akshara2/Scientific_Basis_for_Ayurvedic_Therapies.pdf" target="_blank" class="resource-link"><i class="fas fa-book-open"></i> Scientific Basis</a>
+                            <a href="https://ccras.nic.in/wp-content/uploads/2024/07/Ayurvedic-Home-Remedies-English.pdf" target="_blank" class="resource-link"><i class="fas fa-home"></i> Home Remedies</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="card-img-container">
+                        <img src="../static/images/chatbot.jpg" alt="Ayurveda Chatbot" class="card-img">
+                        <div class="card-overlay"></div>
+                    </div>
+                    <div class="card-content">
+                        <h2>Ayurvedic Chatbot</h2>
+                        <p>Get personalized Ayurvedic remedies using our intelligent Chatbot. Powered by NLP and Machine Learning, it suggests herbal treatments and lifestyle recommendations based on your symptoms.</p>
+                        <a href="/chatbot" class="card-btn">Chat Now <i class="fas fa-comment-dots"></i></a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 by Team No 24 (GAT) | All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://github.com/Ganesh-B-2025" target="_blank"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/gani2000/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" ><i class="fab fa-twitter"></i></a>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+const themeToggle = document.getElementById('theme-icon');
+const menuToggle = document.getElementById('menu-toggle');
+const sidebar = document.getElementById('sidebar');
+const sidebarClose = document.getElementById('sidebar-close');
+const logoText = document.querySelector('.logo-text');
+const linkTexts = document.querySelectorAll('.link-text');
+const username = document.querySelector('.username');
+
+// Theme toggle
+themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    themeToggle.classList.toggle('fa-sun');
+    themeToggle.classList.toggle('fa-adjust');
+    
+    // Save theme preference to localStorage
+    const isDark = document.body.classList.contains('dark-theme');
+    localStorage.setItem('darkTheme', isDark);
+});
+
+// Menu toggle - for mobile view
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.add('active');
+});
+
+// Close sidebar when close button is clicked
+sidebarClose.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+});
+
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768 && 
+        !sidebar.contains(e.target) && 
+        e.target !== menuToggle) {
+        sidebar.classList.remove('active');
+    }
+});
+
+// Check for saved theme preference
+if (localStorage.getItem('darkTheme') === 'true') {
+    document.body.classList.add('dark-theme');
+    themeToggle.classList.add('fa-sun');
+    themeToggle.classList.remove('fa-adjust');
+}
+
+// Add ripple effect to buttons
+document.querySelectorAll('.card-btn, .nav-link').forEach(button => {
+    button.addEventListener('click', function(e) {
+        const x = e.clientX - e.target.getBoundingClientRect().left;
+        const y = e.clientY - e.target.getBoundingClientRect().top;
+        
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 1000);
+    });
+});
+
+// Handle window resize
+function handleResize() {
+    if (window.innerWidth > 768) {
+        // On desktop, ensure sidebar is visible
+        sidebar.classList.add('active');
+        menuToggle.style.display = 'none';
+    } else {
+        // On mobile, hide sidebar by default
+        sidebar.classList.remove('active');
+        menuToggle.style.display = 'block';
+    }
+}
+
+// Initial check
+handleResize();
+
+// Add resize listener
+window.addEventListener('resize', handleResize);
+</script>
+
+</body>
+</html>

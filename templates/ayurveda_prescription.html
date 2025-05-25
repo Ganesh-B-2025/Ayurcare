@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayurveda_prescription - AyurCure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="../static/css/Prescription.css">
+</head>
+
+<body>
+<div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <i class="fas fa-times sidebar-close" id="sidebar-close"></i>
+        <div class="sidebar-top">
+            <div class="profile">
+                <img src="../static/uploads/{{ profile_pic }}" alt="Profile Picture" class="profile-img">
+                <h3 class="username">{{ username }}</h3>
+            </div>
+        </div>
+        <div class="sidebar-scrollable">
+            <ul class="nav-links">
+                <li><a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> <span class="link-text">Dashboard</span></a></li>
+                <li><a href="/ayurveda_prescription" class="nav-link active"><i class="fas fa-notes-medical"></i> <span class="link-text">Prescriptions</span></a></li>
+                <li><a href="/chatbot" class="nav-link"><i class="fas fa-robot"></i> <span class="link-text">Chatbot</span></a></li>
+                <li><a href="/contact" class="nav-link"><i class="fas fa-envelope"></i> <span class="link-text">Contact</span></a></li>
+                <li><a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> <span class="link-text">Logout</span></a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>AyurCure Wellness</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="header">
+            <div class="logo">AyurCure</div>
+            <div class="theme-toggle">
+                <i class="fas fa-adjust" id="theme-icon"></i>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="prescription-container">
+                <h1 class="heading">Generate Medical Report</h1>
+                <p class="subheading">Fill in the patient details to generate an Ayurvedic prescription</p>
+                
+                <form id="reportForm" method="POST" action="/generate_plant_report">
+                    <div class="form-group">
+                        <label for="patient_name">Patient Name</label>
+                        <input type="text" id="patient_name" name="patient_name" class="form-control" required placeholder="Enter patient's full name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="patient_age">Patient Age</label>
+                        <input type="number" id="patient_age" name="patient_age" class="form-control" required placeholder="Enter patient's age" oninput="checkAge(this)">
+                        <span id="age_warning" class="warning-text"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="symptoms">Symptoms</label>
+                        <input type="text" id="symptoms" name="symptoms" class="form-control" required placeholder="Describe symptoms (comma separated)" oninput="validateSymptoms(this)">
+                        <span id="symptoms_warning" class="warning-text"></span>
+                        <small class="text-muted">Example: headache, fever, fatigue</small>
+                    </div>
+                
+                    <div class="text-center mt-3">
+                        <button type="button" id="captureBtn" class="btn btn-primary">
+                            <i class="fas fa-camera"></i> Capture Emotion
+                        </button>
+                    </div>
+                
+                    <div id="captureStatus" class="text-success text-center mt-2" style="display: none;">
+                        <i class="fas fa-check-circle"></i> <span id="statusText"></span>
+                    </div>
+                
+                    <div class="text-center mt-3">
+                        <button type="submit" id="submitBtn" class="btn btn-success" disabled>
+                            <i class="fas fa-file-medical"></i> Generate Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <script>
+                function checkAge(input) {
+                    let warning = document.getElementById("age_warning");
+                    if (input.value > 70) {
+                        warning.innerText = "Consult a doctor for patients over 70 years.";
+                    } else {
+                        warning.innerText = "";
+                    }
+                }
+                
+                function validateSymptoms(input) {
+                    const warning = document.getElementById("symptoms_warning");
+                    const pattern = /^[A-Za-z\s,]+$/;
+                    if (!pattern.test(input.value)) {
+                        warning.innerText = "Only letters, spaces, and commas are allowed.";
+                        input.value = input.value.slice(0, -1);
+                    } else {
+                        warning.innerText = "";
+                    }
+                }
+                
+                document.getElementById('captureBtn').addEventListener('click', function() {
+                    const btn = this;
+                    const originalText = btn.innerHTML;
+                    
+                    // Show loading state
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Capturing...';
+                    btn.disabled = true;
+                    
+                    fetch('/capture_emotion', {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            document.getElementById('captureStatus').style.display = 'block';
+                            document.getElementById('statusText').innerHTML = `Error: ${data.error}`;
+                            document.getElementById('captureStatus').style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+                            document.getElementById('captureStatus').style.borderLeftColor = '#dc3545';
+                        } else {
+                            document.getElementById('captureStatus').style.display = 'block';
+                            document.getElementById('statusText').innerHTML = `
+                                <strong>Emotion Captured:</strong> ${data.emotion}<br>
+                                <strong>Health Tip:</strong> ${data.health_tip}
+                            `;
+                            document.getElementById('submitBtn').disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        document.getElementById('captureStatus').style.display = 'block';
+                        document.getElementById('statusText').innerHTML = 'Error capturing emotion. Please try again.';
+                        document.getElementById('captureStatus').style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+                        document.getElementById('captureStatus').style.borderLeftColor = '#dc3545';
+                    })
+                    .finally(() => {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    });
+                });
+            </script>
+        </div>
+        
+        <footer class="footer">
+            <p>&copy; 2025 by Team No 24 (GAT) | All rights reserved.</p>
+        </footer>
+    </div>
+</div>
+
+<script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-icon');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-theme');
+        if(document.body.classList.contains('dark-theme')){
+            themeToggle.classList.remove('fa-adjust');
+            themeToggle.classList.add('fa-sun');
+        } else {
+            themeToggle.classList.remove('fa-sun');
+            themeToggle.classList.add('fa-adjust');
+        }
+    });
+    
+    // Mobile sidebar toggle
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const menuToggle = document.getElementById('menu-toggle');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+        
+        if (sidebarClose) {
+            sidebarClose.addEventListener('click', () => {
+                sidebar.classList.remove('active');
+            });
+        }
+    });
+</script>
+<script>
+    function checkAge(input) {
+        let warning = document.getElementById("age_warning");
+        if (input.value > 70) {
+            warning.innerText = "Consult a doctor for patients over 70 years.";
+        } else {
+            warning.innerText = "";
+        }
+    }
+
+    function validateSymptoms(input) {
+        const warning = document.getElementById("symptoms_warning");
+        const pattern = /^[A-Za-z\s,]+$/;
+        if (!pattern.test(input.value)) {
+            warning.innerText = "Only letters, spaces, and commas are allowed.";
+            input.value = input.value.slice(0, -1);
+        } else {
+            warning.innerText = "";
+        }
+    }
+
+    function validatePatientName(input) {
+        const pattern = /^[A-Za-z\s]+$/;
+        if (!pattern.test(input.value)) {
+            input.value = input.value.slice(0, -1);
+        }
+    }
+
+    document.getElementById('patient_name').addEventListener('input', function() {
+        validatePatientName(this);
+    });
+
+    // ... rest of your script remains unchanged ...
+</script>
+
+</body>
+</html>

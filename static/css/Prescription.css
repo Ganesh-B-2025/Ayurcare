@@ -1,0 +1,155 @@
+.prescription-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.prescription-container:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--primary-dark);
+    font-size: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(10, 147, 150, 0.2);
+}
+
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(10, 147, 150, 0.3);
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+#captureStatus {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    background-color: rgba(148, 210, 189, 0.2);
+    border-left: 4px solid var(--primary-color);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.warning-text {
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Animation for the form */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.prescription-container {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .prescription-container {
+        padding: 20px;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 14px;
+    }
+}
+
+/* Dark theme adjustments */
+.dark-theme .prescription-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .form-control {
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.dark-theme .form-group label {
+    color: var(--primary-light);
+}
+
+.dark-theme #captureStatus {
+    background-color: rgba(10, 147, 150, 0.1);
+    border-left-color: var(--primary-light);
+}
